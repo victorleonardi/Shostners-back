@@ -3,57 +3,49 @@
 const express = require('express')
 const UrlModel = require('../models/url_model')
 const router = express.Router()
+const { getUrl, getFullUrl }  =require("../utils/utils")
 
 // Post
 
 router.post('/', async (req, res) => {
+    const encode = req.body.name + "anprZ" //trocar essa string por um gerador de valor único
+
     const url = new UrlModel ({
-        true_url: req.body.true_url,
-        custom_url: req.body.custom_url
+        url: req.body.url,
+        encode: encode,
+        category: req.body.category || null,
+        start_date: req.body.start_date || null,
+        end_date: req.body.end_date || null
     })
 
     try {
         const newUrl = await url.save()
-        res.status(201).json(newUrl)
+        res.status(201).json(newUrl.encode)
     } catch (err) {
         res.status(400).json({message: err.message})
     }
+
 })
 
 // Put
 
-router.put('/:urlId', getUrl, (req, res) =>{
-    res.body.true_url = req.body.true_url
-    res.body.custom_url = req.body.custom_url
-    res.url.views += 1
-    res.url.save()
+router.put('/:urlId', getUrl, async (req, res) =>{
+    res.resultUrl.url = req.body.url
+    res.resultUrl.encode = req.body.encode
+    res.resultUrl.views += 1 //Ver essa questão
+    await res.resultUrl.save()
     res.status(200).json({message: 'viewed'})
 })
 
 // Delete
 
-router.delete('/:urlId', getUrl, (req, res) => {
+router.delete('/:urlId', getUrl, async (req, res) => {
     try {
-     res.url.remove()
+     await res.resultUrl.remove()
      res.json({message: 'url deletada'})
     } catch (err) {
         res.status(500),json({message: err.message})
     }
 })
-
-async function getUrl(req, res, next) {
-    let url
-    try {
-        url = await UrlModel.findById(req.params.urlId)
-        if (url == null){
-            return res.status(404).json({message: 'Cannot find url'})
-        }
-    } catch (err) {
-        res.json({message: err.message})
-    }
-    
-    res.url = url
-    next()
-}
 
 module.exports = router
