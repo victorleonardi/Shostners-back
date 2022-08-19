@@ -3,17 +3,12 @@ const mongoose = require('mongoose')
 
 
 const customUrlScheema = new mongoose.Schema({
-    // Pedir ajuda
-    // nano_id: {
-    //     type: String,
-    //     unique: true,
-    //     default: nanoid(7)
-    // },
-    true_url: {
+
+    url: {
         type: String,
         required: true
     },
-    custom_url: {
+    encode: {
         type: String,
         required: false
     },
@@ -26,11 +21,15 @@ const customUrlScheema = new mongoose.Schema({
         type: String,
         required: false
     },
-    // uri:{
-    //     type: String,
-    //     required: false,
-    //     default: custom_url+nanoid(7)       
-    // }
+    start_date: {
+        type: Date,
+        required: false
+    },
+    end_date: {
+        type: Date,
+        required: false
+    }
+
 },
 {
     timestamps: { 
