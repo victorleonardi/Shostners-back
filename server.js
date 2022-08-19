@@ -5,7 +5,7 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const bodyParser = require('body-parser')
-const port = process.env.PORT || 3000
+const port = process.env.PORT || process.env.LOCAL_PORT
 const mongoose = require('mongoose')
 
 const registerRoute = require('./routes/register')
