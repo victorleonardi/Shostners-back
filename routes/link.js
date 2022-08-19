@@ -1,6 +1,7 @@
 const express = require('express')
 const UrlModel = require('../models/url_model')
 const router = express.Router()
+const { getUrl, checkDate } = require("../utils/utils")
 
 // Get All
 
@@ -16,24 +17,12 @@ router.get('/', async (req, res)=>{
 
 // Get One and Return true_link
 
-router.get('/:urlId', getUrl, (req, res) => {
-    const link = res.url.true_url
-    res.redirect(link)
-})
-
-async function getUrl(req, res, next) {
-    let url
-    try {
-        url = await UrlModel.findById(req.params.urlId)
-        if (url == null){
-            return res.status(404).json({message: 'Cannot find url'})
-        }
-    } catch (err) {
-        res.json({message: err.message})
+router.get('/:urlId', getUrl, checkDate, async (req, res) => {
+    console.log(res.onDate)
+    if(res.onDate == true)    {
+        const link = res.resultUrl.url
+        await res.redirect(link)
     }
-    
-    res.url = url
-    next()
-}
+})
 
 module.exports = router
