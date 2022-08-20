@@ -17,17 +17,19 @@ const customUrlScheema = new mongoose.Schema({
         required: false,
         default: 0
     },
-    category: { //Não ta funfando... mesmo passando a categoria. Pedir ajuda.
+    category: {
         type: String,
         required: false
     },
     start_date: {
         type: Date,
-        required: false
+        required: false,
+        default: Date.now()
     },
     end_date: {
         type: Date,
-        required: false
+        required: false,
+        default: Date("3000-01-01T00:00:00.000Z") //Default para uma data infinita
     }
 
 },
