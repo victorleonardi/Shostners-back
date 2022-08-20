@@ -3,11 +3,11 @@
 const express = require('express')
 const UrlModel = require('../models/url_model')
 const router = express.Router()
-const { getUrl, getFullUrl }  =require("../utils/utils")
+const { getOne, getUrl }  =require("../utils/utils")
 
 // Post
 
-router.post('/', async (req, res) => {
+router.post('/', getUrl, async (req, res) => {
     const encode = req.body.name + "anprZ" //trocar essa string por um gerador de valor único
 
     const url = new UrlModel ({
@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
 
     try {
         const newUrl = await url.save()
-        res.status(201).json(newUrl.encode)
+        res.status(201).json(res.fullUrl + newUrl.encode)
     } catch (err) {
         res.status(400).json({message: err.message})
     }
@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
 
 // Put
 
-router.put('/:urlId', getUrl, async (req, res) =>{
+router.put('/:urlId', getOne, async (req, res) =>{
     res.resultUrl.url = req.body.url
     res.resultUrl.encode = req.body.encode
     res.resultUrl.views += 1 //Ver essa questão
@@ -39,7 +39,7 @@ router.put('/:urlId', getUrl, async (req, res) =>{
 
 // Delete
 
-router.delete('/:urlId', getUrl, async (req, res) => {
+router.delete('/:urlId', getOne, async (req, res) => {
     try {
      await res.resultUrl.remove()
      res.json({message: 'url deletada'})

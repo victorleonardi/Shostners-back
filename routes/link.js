@@ -1,7 +1,7 @@
 const express = require('express')
 const UrlModel = require('../models/url_model')
 const router = express.Router()
-const { getUrl, checkDate } = require("../utils/utils")
+const { getOne, checkDate } = require("../utils/utils")
 
 // Get All
 
@@ -17,7 +17,7 @@ router.get('/', async (req, res)=>{
 
 // Get One and Return true_link
 
-router.get('/:urlId', getUrl, checkDate, async (req, res) => {
+router.get('/:urlId', getOne, checkDate, async (req, res) => {
     console.log(res.onDate)
     if(res.onDate == true)    {
         const link = res.resultUrl.url
