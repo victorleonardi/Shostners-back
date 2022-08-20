@@ -13,9 +13,9 @@ router.post('/', async (req, res) => {
     const url = new UrlModel ({
         url: req.body.url,
         encode: encode,
-        category: req.body.category || null,
-        start_date: req.body.start_date || null,
-        end_date: req.body.end_date || null
+        category: req.body.category,
+        start_date: req.body.start_date,
+        end_date: req.body.end_date
     })
 
     try {
