@@ -1,7 +1,7 @@
 const UrlModel = require('../models/url_model')
 const url = require('url')
 
-async function getUrl(req, res, next) {
+async function getOne(req, res, next) {
     let resultUrl
     const { urlId } = req.params
     try {
@@ -19,10 +19,9 @@ async function getUrl(req, res, next) {
 
 // Função abaixo ainda não funciona. Pensar melhor em como implementar...
 async function checkDate(req, res, next) {
-    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl + res.resultUrl.encode
-    console.log(fullUrl)
+    // var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl + res.resultUrl.encode
     if (res.resultUrl.start_date >= Date.now()) {
-        return await res.send(`A url ainda não foi ativada. Tente usar o link ${fullUrl} a partir da data ${res.resultUrl.start_date.toLocaleString('pt-BR')}`)
+        return await res.send(`A url ainda não foi ativada. Tente usar o link ${res.fullUrl + res.resultUrl.encode} a partir da data ${res.resultUrl.start_date.toLocaleString('pt-BR')}`)
     }else if(res.resultUrl.end_date <= Date.now()){
         return await res.send(`A url buscada foi expirada na data ${res.resultUrl.end_date.toLocaleString('pt-BR')}.`)
     }
@@ -30,4 +29,13 @@ async function checkDate(req, res, next) {
     next()
 }
 
-module.exports ={ getUrl, checkDate}
+async function getUrl(req, res, next) {
+    const protocol = req.protocol
+    const host = req.get('host')
+    const originalUrl = req.originalUrl
+    var fullUrl = protocol + "://" + host + originalUrl
+    res.fullUrl = fullUrl
+    next()
+}
+
+module.exports ={ getOne, checkDate, getUrl}
