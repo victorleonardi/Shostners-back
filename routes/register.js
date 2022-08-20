@@ -3,11 +3,11 @@
 const express = require('express')
 const UrlModel = require('../models/url_model')
 const router = express.Router()
-const { getOne, getUrl }  =require("../utils/utils")
+const { getOne }  =require("../utils/utils")
 
 // Post
 
-router.post('/', getUrl, async (req, res) => {
+router.post('/', async (req, res) => {
     const encode = req.body.name + "anprZ" //trocar essa string por um gerador de valor único
 
     const url = new UrlModel ({
@@ -20,11 +20,10 @@ router.post('/', getUrl, async (req, res) => {
 
     try {
         const newUrl = await url.save()
-        res.status(201).json(res.fullUrl + newUrl.encode)
+        res.status(201).json(process.env.API_GATEWAY_LINK + newUrl.encode)
     } catch (err) {
         res.status(400).json({message: err.message})
     }
-
 })
 
 // Put
