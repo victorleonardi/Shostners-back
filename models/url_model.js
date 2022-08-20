@@ -19,7 +19,8 @@ const customUrlScheema = new mongoose.Schema({
     },
     category: {
         type: String,
-        required: false
+        required: false,
+        default: "Sem categoria"
     },
     start_date: {
         type: Date,
