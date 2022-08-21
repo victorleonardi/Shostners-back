@@ -23,14 +23,14 @@ const customUrlScheema = new mongoose.Schema({
         default: "Sem categoria"
     },
     start_date: {
-        type: Date,
+        type: String,
         required: false,
         default: Date.now()
     },
     end_date: {
-        type: Date,
+        type: String,
         required: false,
-        default: Date("3000-01-01T00:00:00.000Z") //Default para uma data infinita
+        default: "3000-01-01T00:00:00.000Z" //Default para uma data infinita
     }
 
 },
