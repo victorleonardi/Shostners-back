@@ -3,12 +3,15 @@
 const express = require('express')
 const UrlModel = require('../models/url_model')
 const router = express.Router()
-const { getOne }  =require("../utils/utils")
+const shortId = require('shortid')
+const { getOne, checkUnique }  =require("../utils/utils")
 
 // Post
 
 router.post('/', async (req, res) => {
-    const encode = req.body.name + "anprZ" //trocar essa string por um gerador de valor único
+    const name = req.body.name || ""
+
+    const encode = checkUnique(name)
 
     const url = new UrlModel ({
         url: req.body.url,
