@@ -1,4 +1,5 @@
 const UrlModel = require('../models/url_model')
+const shortId = require('shortid')
 const url = require('url')
 
 async function getOne(req, res, next) {
@@ -38,4 +39,15 @@ async function getUrl(req, res, next) {
     next()
 }
 
-module.exports ={ getOne, checkDate, getUrl}
+async function checkUnique(name) {
+    let code = name + shortId.generate()
+    UrlModel.countDocuments({encode: code}, function(err, count){
+        if (count>0){
+            console.log(`has ${code}`)
+            checkUnique(name)
+        }
+    })
+    return code
+}
+
+module.exports ={ getOne, checkDate, getUrl, checkUnique}
