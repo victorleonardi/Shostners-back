@@ -41,12 +41,12 @@ async function getUrl(req, res, next) {
 
 async function checkUnique(name) {
     let code = name + shortId.generate()
-    UrlModel.countDocuments({encode: code}, function(err, count){
-        if (count>0){
-            console.log(`has ${code}`)
-            checkUnique(name)
-        }
-    })
+    const count = await UrlModel.countDocuments({encode: code})
+    if (count>0){
+        console.log(`has ${code}`)
+        await checkUnique(name)
+        // return code = name + shortId.generate()
+    }
     return code
 }
 

@@ -11,7 +11,7 @@ const { getOne, checkUnique }  =require("../utils/utils")
 router.post('/', async (req, res) => {
     const name = req.body.name || ""
 
-    const encode = checkUnique(name)
+    const encode = await checkUnique(name)
 
     const url = new UrlModel ({
         url: req.body.url,
