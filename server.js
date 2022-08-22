@@ -10,6 +10,7 @@ const mongoose = require('mongoose')
 
 const registerRoute = require('./routes/register')
 const linkRoute = require('./routes/link')
+const analyticsRoute = require('./routes/analytics')
 
 const app = express()
 
@@ -29,6 +30,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.json()) //Utilizado para determinar o tipo de dados que queremos receber. Nesse caso, configurado como json.
 app.use(cors()) //Como a API vai ser usada localhost, não há motivos para passar a url de hospedagem (dominio de origem).
 app.use('/register', registerRoute)
+app.use('/analytics', analyticsRoute)
 app.use('/', linkRoute)
 
 app.listen(port, () => { //21262 é uma porta qualquer do pc. O arrow-function ('() =>') reduz a declaração, declarando a função e usando na mesma linha, como um lambda em python.
