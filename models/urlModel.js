@@ -1,8 +1,6 @@
-// const nanoId = require('nanoid') //Ver como usar
 const mongoose = require('mongoose')
 
-
-const customUrlScheema = new mongoose.Schema({
+const urlModelScheema = new mongoose.Schema({
 
     url: {
         type: String,
@@ -11,11 +9,6 @@ const customUrlScheema = new mongoose.Schema({
     encode: {
         type: String,
         required: false
-    },
-    views: {
-        type:Number,
-        required: false,
-        default: 0
     },
     category: {
         type: String,
@@ -39,6 +32,7 @@ const customUrlScheema = new mongoose.Schema({
         createdAt: 'created_at', 
         updatedAt: 'updated_at' 
     }
-})
+},
+{ collection: 'urlmodels_prod'})
 
-module.exports = mongoose.model('UrlModel', customUrlScheema)
+module.exports = mongoose.model('urlmodels_prod', urlModelScheema)
