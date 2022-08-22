@@ -1,11 +1,11 @@
 //Criamos um arquivo para gerenciar as rotas possíveis, direnciando as requisições.
 
 const express = require('express')
-const UrlModel = require('../models/url_model')
+const UrlModel = require('../models/urlModel')
 const router = express.Router()
 const shortId = require('shortid')
-const { getOne, checkUnique }  =require("../utils/utils")
-
+const { getOne }  =require("../utils/middlewaresModel")
+const { checkUnique }  =require("../utils/utils")
 // Post
 
 router.post('/', async (req, res) => {
