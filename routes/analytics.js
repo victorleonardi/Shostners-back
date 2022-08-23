@@ -46,13 +46,25 @@ router.post('/', async (req, res) => {
 // Get All filtering by encode
 
 router.get('/all/:encodeAccess', getAllByEncode, async (req, res)=>{
+    const { encodeAccess } = req.params
     try {
-        const analytics = await UrlAccess.find()
+        const analytics = await UrlAccess.find({encode: encodeAccess})
         res.json(analytics)
     } catch (err) {
         res.status(500).json({message: err.message})
     }
 
+})
+
+// Get Distinct Encod
+
+router.get("/distinct/", async(req, res) =>{
+    try{
+        const distinctEncodes = await UrlAccess.find().distinct('encode')
+        res.json(distinctEncodes)
+    } catch (err){
+        res.status(500).json({message: err.message})
+    }
 })
 
 // Get All
