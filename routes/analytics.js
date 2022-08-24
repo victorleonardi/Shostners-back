@@ -1,33 +1,7 @@
 const express = require('express')
 const UrlAccess = require('../models/urlAccess')
 const router = express.Router()
-const { getAllByEncode} = require('../utils/middlewaresAccess')
-
-// Put view
-router.put('/:encodeAccess', async (req, res) => {
-    const { encodeAccess } = req.params
-    const [ today ] = new Date().toISOString().split('T')
-    try {
-        await UrlAccess.findOneAndUpdate(
-            {
-                $and:[
-                    {encode: encodeAccess},
-                    {created_at: {$gte: today}}
-                ]
-            },
-            {
-                $inc: {
-                    view: 1
-                }
-            }
-        )
-        res.status(201).json({message: "view counted"})
-    } catch (err) {
-        res.status(400).json({message: err.message})
-    }
-
-
-})
+const { getAllByEncode, getEncodeAndExactDate, getOneById, groupByDate} = require('../utils/middlewaresAccess')
 
 // Post view
 
@@ -46,14 +20,7 @@ router.post('/', async (req, res) => {
 // Get All filtering by encode
 
 router.get('/all/:encodeAccess', getAllByEncode, async (req, res)=>{
-    const { encodeAccess } = req.params
-    try {
-        const analytics = await UrlAccess.find({encode: encodeAccess})
-        res.json(analytics)
-    } catch (err) {
-        res.status(500).json({message: err.message})
-    }
-
+    await res.redirect(res.resultEncode)
 })
 
 // Get Distinct Encod
@@ -67,9 +34,33 @@ router.get("/distinct/", async(req, res) =>{
     }
 })
 
+// Get Views By Date
+
+router.get("/views/:encodeAccess/:dateTime", getEncodeAndExactDate, async(req, res) =>{
+    try {
+        const totalViews = await res.resultEncodeAndExactDate.length
+        res.json(totalViews)
+    } catch (err) {
+        res.status(500).json({message: err.message})
+    }
+})
+
+// Get All Views
+
+router.get("/views/:encodeAccess", async (req, res) =>{
+    let totalViews
+    const { encodeAccess } = req.params
+    try {
+        totalViews = (await UrlAccess.find({encode: encodeAccess})).length
+        res.json(totalViews)
+    } catch (err) {
+        res.status(500).json({message: err.message})
+    }
+})
+
 // Get All
 
-router.get('/all', async (req, res)=>{
+router.get('/all/', async (req, res)=>{
     try {
         const analytics = await UrlAccess.find()
         res.json(analytics)
@@ -78,5 +69,26 @@ router.get('/all', async (req, res)=>{
     }
 
 })
+
+// Get 'Dataset' for a Single Encoded Grouped By Day And Counted 
+
+router.get('/graphics/:encodeAccess', getAllByEncode, groupByDate, async (req, res)=>{
+    let keysArray = Array.from( res.groupByEncodeAndDate.keys() ) 
+    let valuesArray = Array.from( res.groupByEncodeAndDate.values() ) 
+
+    await res.json([keysArray, valuesArray])
+})
+
+// Delete
+
+router.delete('/:accessId', getOneById, async (req, res) => {
+    try {
+     await res.resultId.remove()
+     res.json({message: 'url deletada'})
+    } catch (err) {
+        res.status(500).json({message: err.message})
+    }
+})
+
 
 module.exports = router
