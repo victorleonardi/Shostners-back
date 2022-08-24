@@ -19,11 +19,20 @@ async function getOne(req, res, next) {
 }
 
 async function checkDate(req, res, next) {
+    const fullDate = res.resultUrl.start_date.toISOString().split('T')
+    const date = fullDate[0]
+    const time = fullDate[1].slice(0, 5)
+
+    console.log(fullDate)
+
     if (res.resultUrl.start_date >= Date.now()) {
-        return await res.send(`A url ainda não foi ativada. Tente usar o link ${res.fullUrl + res.resultUrl.encode} a partir da data ${res.resultUrl.start_date.toLocaleString('pt-BR')}`)
+        return await res.redirect(process.env.API_GATEWAY_LINK + `earlyondate/${date}&${time}`)
     }else if(res.resultUrl.end_date <= Date.now()){
-        return await res.send(`A url buscada foi expirada na data ${res.resultUrl.end_date.toLocaleString('pt-BR')}.`)
+        return await res.redirect(process.env.API_GATEWAY_LINK + `outofdate/${date}&${time}`)
     }
+
+    // (process.env.API_GATEWAY_LINK + "earlyondate/" `${res.resultUrl.start_date.toLocaleString('pt-BR')}`)
+
     res.onDate = true
     next()
 }
