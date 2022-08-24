@@ -26,9 +26,9 @@ async function checkDate(req, res, next) {
     console.log(fullDate)
 
     if (res.resultUrl.start_date >= Date.now()) {
-        return await res.redirect(process.env.FRONT + `earlyondate/${date}&${time}`)
+        return await res.redirect(process.env.FRONT + `earlyondate/${date}/${time}`)
     }else if(res.resultUrl.end_date <= Date.now()){
-        return await res.redirect(process.env.FRONT + `outofdate/${date}&${time}`)
+        return await res.redirect(process.env.FRONT + `outofdate/${date}/${time}`)
     }
 
     // (process.env.API_GATEWAY_LINK + "earlyondate/" `${res.resultUrl.start_date.toLocaleString('pt-BR')}`)
