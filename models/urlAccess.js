@@ -6,18 +6,17 @@ const urlAccessScheema = new mongoose.Schema({
         type: String,
         required: true
     },
-    view: {
-        type: Number,
+    access_date: {
+        type: String,
         required: false,
-        default: 0
+        default: () => new Date().toISOString().split('T')[0]
+    },
+    access_time: {
+        type: String,
+        required: false,
+        default: () => new Date().toISOString().split('T')[1].slice(0,8) 
     }
 },
-{
-    timestamps: { 
-        createdAt: 'created_at', 
-        updatedAt: 'updated_at' 
-    }
-},
-{ collection: 'urlaccess_prod'})
+{ collection: 'urlaccess_prods'})
 
-module.exports = mongoose.model('urlaccess_prod', urlAccessScheema)
+module.exports = mongoose.model('urlaccess_prods', urlAccessScheema)
