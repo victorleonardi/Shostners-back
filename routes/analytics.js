@@ -76,7 +76,12 @@ router.get('/graphics/:encodeAccess', getAllByEncode, groupByDate, async (req, r
     let keysArray = Array.from( res.groupByEncodeAndDate.keys() ) 
     let valuesArray = Array.from( res.groupByEncodeAndDate.values() ) 
 
-    await res.json([keysArray, valuesArray])
+    await res.json(
+        {
+            x: keysArray,
+            y: valuesArray
+        }
+    )
 })
 
 // Delete
