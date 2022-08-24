@@ -1,5 +1,4 @@
 const urlModel = require('../models/urlModel')
-// const accessModel = require('../models/urlAccess')
 const shortId = require('shortid')
 const url = require('url')
 
