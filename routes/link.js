@@ -4,6 +4,7 @@ const UrlAccess = require('../models/urlAccess')
 const router = express.Router()
 const { getOne, checkDate } = require("../utils/middlewaresModel")
 const urlAccess = require('../models/urlAccess')
+const { default: axios } = require('axios')
 
 // Get All
 
@@ -17,30 +18,27 @@ router.get('/', async (req, res)=>{
 
 })
 
-// Get One
+// Get One, Post And Redirect
 
 router.get('/:urlId', getOne, checkDate, async (req, res) => {
     console.log(res.onDate)
     if(res.onDate == true)    {
         const link = res.resultUrl.url
         const encode = res.resultUrl.encode
-        const [ today ] = new Date().toISOString().split('T')
-
-        await UrlAccess.findOneAndUpdate(
-            {
-                $and:[
-                    {encode: encode},
-                    {created_at: {$gte: today}}
-                ]
-            },
-            {
-                $inc: {
-                    view: 1
-                }
-            }
-        )
+        axios.post(process.env.API_GATEWAY_ANALYTICS, {encode: encode})
 
         await res.redirect(link)
+        
+    }
+})
+
+// Get One
+
+router.get('/link/:urlId', getOne, checkDate, async (req, res) => {
+    try {
+        res.json(res.resultUrl)
+    } catch (err) {
+        res.status(500).json({message: err.message})
     }
 })
 
