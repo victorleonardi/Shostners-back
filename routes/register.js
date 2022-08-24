@@ -3,7 +3,6 @@
 const express = require('express')
 const UrlModel = require('../models/urlModel')
 const router = express.Router()
-const shortId = require('shortid')
 const { getOne }  =require("../utils/middlewaresModel")
 const { checkUnique }  =require("../utils/utils")
 // Post
@@ -46,7 +45,7 @@ router.delete('/:urlId', getOne, async (req, res) => {
      await res.resultUrl.remove()
      res.json({message: 'url deletada'})
     } catch (err) {
-        res.status(500),json({message: err.message})
+        res.status(500).json({message: err.message})
     }
 })
 
