@@ -26,7 +26,6 @@ router.get('/:urlId', getOne, checkDate, async (req, res) => {
         const link = res.resultUrl.url
         const encode = res.resultUrl.encode
         axios.post(process.env.API_GATEWAY_ANALYTICS, {encode: encode})
-
         await res.redirect(link)
         
     }
